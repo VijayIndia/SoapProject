@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>groupId</groupId>
+    <artifactId>SoapProject</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <properties>
+        <cxf.version>2.2.5</cxf.version>
+        <spring.version>2.5.6</spring.version>
+    </properties>
+    <packaging>war</packaging>
+    <dependencies>
+        <!-- Spring Related Dependencies -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!--Servlet API -->
+       <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-core -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-core</artifactId>
+            <version>2.2.5</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.springframework:spring-core:5.2.2.RELEASE</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!--SOAP JAXB Binding -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <!-- Map Java APIs to and from WSDL models ,It can be replaced with JAX-WS for Annotation -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-frontend-simple</artifactId>
+            <version>${cxf.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-databinding-aegis -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-databinding-aegis</artifactId>
+            <version>${cxf.version}</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-beans</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-context</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-core -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-core</artifactId>
+            <version>${cxf.version}</version>
+            <exclusions>
+            <exclusion>
+                <artifactId>spring-core</artifactId>
+                <groupId>org.springframework</groupId>
+            </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-bindings-http -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-bindings-http</artifactId>
+            <version>2.5.9</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-beans</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-context</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-core</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+    <build>
+    <plugins>
+        <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.0.2</version>
+        </plugin>
+        <!--Generate Source Code from Wsdl -->
+        <plugin>
+        <groupId>org.apache.cxf</groupId>
+        <artifactId>cxf-codegen-plugin</artifactId>
+        <version>${cxf.version}</version>
+        <executions>
+            <execution>
+                <id>generate-wsdl-sources</id>
+                <phase>generate-sources</phase>
+                <configuration>
+                    <sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
+                    <wsdlOptions>
+                        <wsdlOption>
+                            <wsdl>${basedir}/src/main/resources/tutorialspoint.wsdl</wsdl>
+                        </wsdlOption>
+                    </wsdlOptions>
+                </configuration>
+                <goals>
+                    <goal>wsdl2java</goal>
+                </goals>
+            </execution>
+        </executions>
+
+        </plugin>
+        <!--Add Source Code to Source Folder -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>3.0.0</version>
+            <executions>
+                <execution>
+                    <id>add-source</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>${project.build.directory}/generated/</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+    </build>
+</project>

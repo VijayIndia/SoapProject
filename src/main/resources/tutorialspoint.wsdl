@@ -1,0 +1,56 @@
+<wsdl:definitions xmlns:wsdl = "http://schemas.xmlsoap.org/wsdl/"
+             xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+             xmlns:soap = "http://schemas.xmlsoap.org/wsdl/soap/"
+             targetNamespace = "http://www.examples.com/wsdl/TutorialService.wsdl"
+             xmlns:tns = "http://www.examples.com/wsdl/TutorialService.wsdl"
+             name = "TutorialService" >
+
+    <!--Creating DataTypes and Associting the DataTypes from Xsd File -->
+    <wsdl:types>
+        <xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema"
+                    xmlns:tns = "http://www.examples.com/wsdl/TutorialService.wsdl"
+                    targetNamespace = "http://www.examples.com/wsdl/TutorialService.wsdl"
+                    elementFormDefault="qualified" attributeFormDefault="qualified">
+            <xsd:include schemaLocation="tutorialspoint.xsd"/>
+        </xsd:schema>
+        <xsd:schema xmlns:xsd = "http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://www.examples.com/wsdl/TutorialService.wsdl" schemaLocation="tutorialspoint.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+
+    <!--Assigning the Variable with the Datatypes -->
+    <wsdl:message name="tutorialsRequest">
+        <wsdl:part name="firstName" element="tns:firstName"/>
+    </wsdl:message>
+    <wsdl:message name="tutorialsResponse">
+        <wsdl:part name="returnName" element="tns:returnType"/>
+    </wsdl:message>
+
+    <!--Grouping Multiple Operations under a single Object -->
+    <wsdl:portType name="tutorialService">
+        <wsdl:operation name="tutorialsOperation">
+            <wsdl:input name="tutorialsRequest" message="tutorialsRequest"/>
+            <wsdl:output name="tutorialsResponse" message="tutorialsResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <!--Relationship between Operation and SOAP -->
+    <wsdl:binding name="TutorialSoapBinding" type="tns:tutorialService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <wsdl:operation name="tutorialsOperation">
+            <soap:operation soapAction=""/>
+            <wsdl:input name="tutorialsRequest">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="tutorialsResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    
+    <wsdl:service name="TutorialService">
+        <wsdl:port name="TutorialService" binding="tns:TutorialSoapBinding">
+            <soap:address location="http://localhost:9092/tutorialService" />
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

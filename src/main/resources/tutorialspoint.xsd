@@ -1,0 +1,14 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns = "http://www.examples.com/wsdl/TutorialService.wsdl"
+            targetNamespace = "http://www.examples.com/wsdl/TutorialService.wsdl">
+
+    <xsd:simpleType name="title">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="Mr"/>
+            <xsd:enumeration value="Mrs"/>
+            <xsd:enumeration value="Miss"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:element name="firstName" type="xsd:string"/>
+    <xsd:element name="returnType" type="xsd:string"/>
+</xsd:schema>
